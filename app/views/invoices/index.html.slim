@@ -1,0 +1,36 @@
+.row
+  .col.s10.push-s1
+    h3 #{current_user.full_name}'s invoices
+
+    table
+      thead
+        tr
+          th Customer name
+          th Invoicing date
+          th Due date
+          th Terms and conditions
+          th Payment mode
+          th
+          th
+          th
+
+      tbody
+        - @invoices.each do |invoice|
+          .render_invoice_partial id="invoice_data_#{invoice.id}"
+            tr
+              td = invoice.customer_name
+              td = invoice.invoicing_date
+              td = invoice.due_date
+              td
+                - if invoice.terms_and_conditions
+                  i.fa.fa-check
+                - else
+                  i.fa.fa-remove
+              td = invoice.payment_mode
+              td = link_to '', invoice, class: "fa fa-eye button waves-effect waves-light btn teal white-text"
+              td = link_to '', edit_invoice_path(invoice), class: "fa fa-pencil waves-effect waves-light btn teal white-text"
+              td = link_to '', invoice, data: { confirm: 'Are you sure?' }, method: :delete, class:"fa fa-trash waves-effect waves-light white-text btn teal"
+
+    br
+    = paginate @invoices
+    = link_to 'New Invoice', new_invoice_path, class: "btn button waves-effect waves-light btn red white-text"

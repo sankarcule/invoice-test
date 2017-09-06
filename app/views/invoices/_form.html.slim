@@ -1,0 +1,24 @@
+= simple_form_for @invoice do |f|
+  - if @invoice.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@invoice.errors.count, "error")} prohibited this invoice from being saved:"
+      ul
+        - @invoice.errors.full_messages.each do |message|
+          li = message
+  .field
+    = f.input :customer_name, input_html: {value: current_user.full_name}
+  .field
+    = f.input :invoicing_date, as: :string, input_html: {class: 'datepicker'}
+  .field
+    = f.input :due_date, as: :string, input_html: {class: 'datepicker'}
+  #tasks
+    = f.simple_fields_for :products do |product|
+      = render 'product_fields', f: product
+    .links
+      = link_to_add_association 'add product', f, :products
+  .field
+    = f.input :payment_mode, as: :select, collection: ['cash', 'cheque', 'draft']
+  .field
+    = f.check_box :terms_and_conditions
+    = f.label :terms_and_conditions
+  .actions = f.submit 'Submit', class: "button waves-effect waves-light btn red white-text"
